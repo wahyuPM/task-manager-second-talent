@@ -1,109 +1,160 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Second Talent FE Test — Next.js App
 
-## Table of Contents
+A Next.js 15 application featuring authentication pages and a tasks module (task list and create/edit). It includes internationalization, Tailwind CSS v4, TypeScript, testing with Vitest, and a commit workflow powered by Husky, Commitlint, and Commitizen.
 
-- [Getting Started](#getting-started)
-- [Development Tools](#development-tools)
-  - [Husky](#husky)
-  - [Commitizen](#commitizen)
-  - [Commitlint](#commitlint)
-  - [Tailwind CSS](#tailwind-css)
-- [Internationalization](#internationalization)
-- [Folder-level Documentation](#folder-level-documentation)
-- [Learn More](#learn-more)
-- [Deploy on Vercel](#deploy-on-vercel)
+This repository is prepared to run locally or via Docker Compose. Command snippets are provided for zsh.
 
 ---
 
-## Getting Started
+## Project Structure
 
-First, run the development server:
+- src/app — App Router pages and layout
+  - login — Authentication page
+  - signup — Signup page
+  - tasks — Task list and create/edit page
+  - layout.tsx — Root layout
+  - page.tsx — Home page
+- src/components — Reusable UI components
+  - layout — Layout-related docs
+  - tasks — Task UI (filters, list)
+  - ui/LangSwitcher — Language switcher component
+  - utils/twMerge.ts — Tailwind merge helper
+- src/data — Client-side repositories and stores
+  - auth — auth.repository.ts, auth.store.ts
+  - task — task.repository.ts, task.store.ts
+- src/domain — Domain layer and tests (auth, task)
+- src/features — Feature-level docs
+- src/i18n — Internationalization config and request helper
+- src/services — Shared services like locale
+- messages — Translation JSON files (e.g., en.json, id.json)
+- public — Static assets
 
-```bash
+---
+
+## Technical Choices
+
+- Next.js 15 (App Router) and React 19 for modern, file-based routing and concurrent features
+- TypeScript for static typing and maintainability
+- next-intl for internationalization and locale handling
+- Tailwind CSS v4 for utility-first styling
+- Vitest for fast unit testing
+- ESLint + Prettier to enforce consistent code style
+- Husky + Commitlint + Commitizen for clean, conventional commit history
+- Production image via Docker multi-stage build using Next.js standalone output
+
+---
+
+## Run with Docker Compose (zsh)
+
+Prerequisites:
+- Docker and Docker Compose plugin installed
+
+Build the image:
+```zsh
+docker compose build
+```
+
+Start the container:
+```zsh
+docker compose up -d
+```
+
+Open the app:
+- http://localhost:3000
+
+Stop the app:
+```zsh
+docker compose down
+```
+
+Notes:
+- The Dockerfile uses a multi-stage build to create a small runtime image with Next.js standalone output.
+- The app listens on port 3000 in the container and is published to 3000 on the host.
+
+---
+
+## Authentication — Test Credentials
+
+The app starts with a seeded demo account you can use to log in:
+
+- Email: demo@example.com
+- Password: demo123
+
+You can also create a new account via the Signup page, then log in with those credentials. Authentication here is for demo purposes only and uses an httpOnly cookie (`tm_session`) with an in-memory store.
+
+---
+
+## Local Development (zsh)
+
+Install dependencies:
+```zsh
+npm install
+```
+
+Start the dev server:
+```zsh
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open the app:
+- http://localhost:3000
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Development Tools
-
-### Husky
-
-[Husky](https://github.com/typicode/husky#readme) is installed to manage Git hooks. It helps enforce code quality and commit standards automatically.
-
-- Pre-commit hooks: Run linters or tests before committing.
-- Pre-push hooks: Run checks before pushing to remote.
-
-- Usege :
-
-Hooks are triggered automatically. To add or modify hooks, see the .husky/ directory.
-
-### Commitizen
-
-[Commitizen](https://github.com/commitizen/cz-cli#readme) is used to standardize commit messages.
-
-- How to use:
-
-```
-npx cz
+Run tests:
+```zsh
+npm test
 # or
-npm run commit
+npm run test:watch
 ```
 
-### Commitlint
+Lint and format:
+```zsh
+npm run lint
+```
 
-[Commitlint](https://github.com/conventional-changelog/commitlint#readme) checks that your commit messages meet the conventional commit format.
-
-- How it works:
-
-  Commitlint is integrated with Husky and runs automatically on commit. If your message does not follow the rules, the commit will be rejected.
-
-### Tailwind CSS
-
-This Project uses [Tailwind CSS v4](https://tailwindcss.com/) for styling.
-
-Documentation:
-
-Refer to the [Tailwind CSS documentation](https://tailwindcss.com/docs) for more information on how to use Tailwind CSS.
+---
 
 ## Internationalization
 
-This project uses next-intl for internationalization (i18n).
+This project uses next-intl. Translation messages live in the messages/ folder (e.g., en.json, id.json). See src/i18n/config.ts for configuration details and src/services/locale.ts for helpers. The UI includes a language switcher component at src/components/ui/LangSwitcher.
 
-- How to use:
+---
 
-  Refer to the next-intl [documentation](https://github.com/amannn/next-intl) for adding and managing translations.
+## Screenshots
 
-## Folder-level Documentation
+Place screenshots in the root-level screenshots/ directory and commit them. Suggested filenames:
+- screenshots/login.png — Authentication page
+- screenshots/task-list.png — Task list page
+- screenshots/task-create-edit.png — Create/Edit task page
 
-Some folders in this project contain their own [README.md] files.
-These provide specific documentation and usage instructions for the code or components within those folders.
+You can also embed them here in the README once added:
 
-- How to use:
+- Authentication: ![Login](screenshots/login.png)
+- Task list: ![Task List](screenshots/task-list.png)
+- Create/Edit task: ![Create/Edit Task](screenshots/task-create-edit.png)
 
-  Look for a [README.md] inside a folder to understand its purpose, usage, and any special instructions.
+---
 
-## Learn More
+## Commit Workflow (Clean History)
 
-To learn more about Next.js, take a look at the following resources:
+This repository is configured for conventional commits to ensure a clean, readable history.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Create a commit message using Commitizen:
+```zsh
+npm run commit
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Husky will run checks and enforce Commitlint rules automatically on commit.
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Troubleshooting (zsh)
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Prefer `docker compose` over the legacy `docker-compose` command.
+- If port 3000 is in use locally, stop any conflicting processes or change the published port in docker-compose.yml.
+- For authentication code paths, the login action entry point is `loginAction` in `src/data/auth/auth.repository.ts`.
+
+---
+
+## License
+
+MIT
