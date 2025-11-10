@@ -1,7 +1,9 @@
 import { getCurrentUserAction, logoutAction } from '@data/auth/auth.repository';
-import { createTaskAction, deleteTaskAction, listTasksAction, updateTaskAction } from '@data/task/task.repository';
+import { createTaskAction, listTasksAction, deleteTaskAction, updateTaskAction } from '@data/task/task.repository';
 import { redirect } from 'next/navigation';
-import Link from 'next/link';
+import FilterTabs from '@/components/tasks/FilterTabs';
+import TaskList from '@/components/tasks/TaskList';
+
 
 function isStatus(s?: string): s is 'todo' | 'in_progress' | 'done' {
   return s === 'todo' || s === 'in_progress' || s === 'done';
@@ -10,12 +12,12 @@ function isStatus(s?: string): s is 'todo' | 'in_progress' | 'done' {
 export default async function TasksPage({
   searchParams,
 }: {
-  searchParams?: { [key: string]: string | string[] | undefined };
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
   const user = await getCurrentUserAction();
   if (!user) redirect('/login');
 
-  const sp = searchParams ?? {};
+  const sp = await searchParams;
   const statusParam = typeof sp.status === 'string' ? sp.status : undefined;
   const errorParam = typeof sp.error === 'string' ? sp.error : undefined;
   const statusFilter = isStatus(statusParam) ? statusParam : undefined;
@@ -63,56 +65,12 @@ export default async function TasksPage({
           </form>
         </section>
 
-        {/* Filters */}
-        <section className="flex items-center gap-2">
-          <span className="text-sm">Filter:</span>
-          <Link className={`text-sm underline-offset-2 ${!statusFilter ? 'underline' : ''}`} href="/tasks">All</Link>
-          <Link className={`text-sm underline-offset-2 ${statusFilter === 'todo' ? 'underline' : ''}`} href="/tasks?status=todo">To do</Link>
-          <Link className={`text-sm underline-offset-2 ${statusFilter === 'in_progress' ? 'underline' : ''}`} href="/tasks?status=in_progress">In progress</Link>
-          <Link className={`text-sm underline-offset-2 ${statusFilter === 'done' ? 'underline' : ''}`} href="/tasks?status=done">Done</Link>
-        </section>
+        {/* Filters (client, reacts to URL) */}
+        <FilterTabs />
 
-        {/* List */}
+        {/* List with accordion edit form */}
         <section className="space-y-4">
-          {tasks.length === 0 ? (
-            <p className="text-sm text-gray-600">No tasks.</p>
-          ) : (
-            <ul className="space-y-4">
-              {tasks.map((t) => (
-                <li key={t.id} className="border rounded p-4 space-y-3">
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs text-gray-500">Updated {new Date(t.updatedAt).toLocaleString()}</span>
-                    <form action={deleteTaskAction}>
-                      <input type="hidden" name="id" value={t.id} />
-                      <button className="text-red-600 text-sm">Delete</button>
-                    </form>
-                  </div>
-                  <form action={updateTaskAction} className="grid gap-3">
-                    <input type="hidden" name="id" value={t.id} />
-                    <div>
-                      <label className="block text-sm" htmlFor={`title-${t.id}`}>Title</label>
-                      <input id={`title-${t.id}`} name="title" defaultValue={t.title} className="w-full border rounded px-3 py-2" />
-                    </div>
-                    <div>
-                      <label className="block text-sm" htmlFor={`description-${t.id}`}>Description</label>
-                      <textarea id={`description-${t.id}`} name="description" defaultValue={t.description} className="w-full border rounded px-3 py-2" />
-                    </div>
-                    <div>
-                      <label className="block text-sm" htmlFor={`status-${t.id}`}>Status</label>
-                      <select id={`status-${t.id}`} name="status" defaultValue={t.status} className="w-full border rounded px-3 py-2">
-                        <option value="todo">To do</option>
-                        <option value="in_progress">In progress</option>
-                        <option value="done">Done</option>
-                      </select>
-                    </div>
-                    <div>
-                      <button className="border rounded px-4 py-2">Save</button>
-                    </div>
-                  </form>
-                </li>
-              ))}
-            </ul>
-          )}
+          <TaskList tasks={tasks} onDelete={deleteTaskAction} onUpdate={updateTaskAction} />
         </section>
       </div>
     </div>
