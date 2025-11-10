@@ -1,0 +1,124 @@
+/* import google font after this comment */
+@import "tailwindcss";
+
+:root {
+  --background: #0a0a0a;
+    --foreground: #ededed;
+}
+
+@theme inline {
+  /* u can insert your custom theme here*/
+  /* 
+  for example:
+  --color-primary: #CE572F;  
+  --font-poppins: 'Poppins', sans-serif;
+  */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+/* @media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+} */
+
+body {
+  /* Layered radial glows over base background for glassmorphism */
+  background:
+    radial-gradient(800px circle at 20% -10%, rgba(217, 70, 239, 0.18), transparent 40%),
+    radial-gradient(700px circle at 80% -10%, rgba(14, 165, 233, 0.18), transparent 45%),
+    radial-gradient(900px circle at 50% 120%, rgba(99, 102, 241, 0.12), transparent 50%),
+    var(--background);
+  color: var(--foreground);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Glassmorphism: Auth forms (login/signup) */
+form.w-full.max-w-sm.space-y-4,
+form.w-full.max-w-sm.space-y-5,
+form.w-full.max-w-sm.space-y-4.space-y-5 {
+  padding: 1.25rem 1.25rem;
+  border-radius: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+}
+
+/* Inputs inside glass forms and glass sections */
+form.w-full.max-w-sm.space-y-4 input,
+form.w-full.max-w-sm.space-y-4 textarea,
+form.w-full.max-w-sm.space-y-4 select,
+form.w-full.max-w-sm.space-y-5 input,
+form.w-full.max-w-sm.space-y-5 textarea,
+form.w-full.max-w-sm.space-y-5 select,
+:where(div, section, li).border.rounded input,
+:where(div, section, li).border.rounded textarea,
+:where(div, section, li).border.rounded select {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  color: var(--foreground);
+}
+
+form.w-full.max-w-sm.space-y-4 input::placeholder,
+form.w-full.max-w-sm.space-y-4 textarea::placeholder,
+form.w-full.max-w-sm.space-y-5 input::placeholder,
+form.w-full.max-w-sm.space-y-5 textarea::placeholder {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+form.w-full.max-w-sm.space-y-4 input:focus,
+form.w-full.max-w-sm.space-y-4 textarea:focus,
+form.w-full.max-w-sm.space-y-4 select:focus,
+form.w-full.max-w-sm.space-y-5 input:focus,
+form.w-full.max-w-sm.space-y-5 textarea:focus,
+form.w-full.max-w-sm.space-y-5 select:focus,
+:where(div, section, li).border.rounded input:focus,
+:where(div, section, li).border.rounded textarea:focus,
+:where(div, section, li).border.rounded select:focus {
+  outline: none;
+  border-color: rgba(255, 255, 255, 0.35);
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.18);
+}
+
+/* Submit buttons in forms: gradient glass */
+form.w-full.max-w-sm.space-y-4 button[type="submit"],
+form.w-full.max-w-sm.space-y-5 button[type="submit"],
+:where(div, section, li).border.rounded form button[type="submit"] {
+  background-image: linear-gradient(90deg, rgba(217, 70, 239, 0.9), rgba(14, 165, 233, 0.9));
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 0.5rem;
+  transition: filter 0.2s ease, transform 0.02s ease;
+}
+
+form.w-full.max-w-sm.space-y-4 button[type="submit"]:hover,
+form.w-full.max-w-sm.space-y-5 button[type="submit"]:hover,
+:where(div, section, li).border.rounded form button[type="submit"]:hover {
+  filter: brightness(1.05);
+}
+
+form.w-full.max-w-sm.space-y-4 button[type="submit"]:active,
+form.w-full.max-w-sm.space-y-5 button[type="submit"]:active,
+:where(div, section, li).border.rounded form button[type="submit"]:active {
+  transform: translateY(1px);
+}
+
+/* Glass sections for tasks (create form card and list items) */
+:where(div, section, li).border.rounded {
+  border-color: rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.14);
+}
+
+/* Tiny tweak for delete link/button inside list items */
+:where(li).border.rounded form button:not([type="submit"]) {
+  color: rgba(248, 113, 113, 0.9);
+}
